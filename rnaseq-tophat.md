@@ -13,12 +13,11 @@ cp -r path/to/reference/* mm10/
 ```
 
 # Uliniowienie odczytów do genomu referencyjnego
-W cel uliniwienia odczytów do genomu referencyjnego użyjemy dwóch narzędzi: 
+W cel uliniwienia odczytów do genomu referencyjnego użyjemy narzędzia Tophat2: 
 * TopHat v.2 https://ccb.jhu.edu/software/tophat/index.shtml
-* TMAP https://github.com/iontorrent/TMAP
 
-### Uliniwienie narzędziem TopHat
 
+### Uliniowienie narzędziem TopHat
 Utwórz katalog *tophat*, do niego zapisywane zostaną wszystkie pliki wygenerowane przez TopHat
 ```sh
 mkdir tophat
@@ -38,41 +37,6 @@ Narzęrzie TopHat utworzy katalog *tophat/sample1*, w którym znajdą się wynik
 * plik *accepted_hits.bam* - zawiera uliniowione odczyty
 * plik *unmapped.fq* - zawiera nieuliniowione odczyty
 
-### Uliniwienie narzędziem TMAP
-Odczyty, kórtrych nie uliniowił TopHat zostaną poddane ponownej próbie uliniwienia, za pomocą algorytmów używanych przez TMAP.
-Tworzymy katalog *tmap*, do którego zostanie zapisany uliniowniony plik bam
-```sh 
-mkdir tmap
-```
-Następnie uruchamiamy program
-```sh
-tmap mapall -f mm10/fasta/genome.fa -r tophat/sample1/unmapped.fq -o bam -v stage1 map4 > tmap/sample1.tmp.bam
-```
-Kolejne argumenty programu to :
-* mm10/fasta/genome.fa - plik fasta zawierający genom referencyjny
-* tophat/sample1/unmapped.fq - odczyty do uliniowienia
-* stage1 map4 - parametry programu
-* tmap/sample1.tmp.bam - wynikowy, uliniowiony plik bam
-
-Używając narzędzia *samtools sort* przesortujemy otrzymany plik, ułatwi to dalszą pracę
-```sh
-samtools sort tmap/sample1.tmp.bam tmap/sample1.bam
-```
-W ten sposób otrzymamy posortowany plik *tmap/sample1.bam*. Dla porządku plik *tmap/sample1.tmp.bam* można usunąć
-```sh
-rm tmap/sample1.tmp.bam
-```
-
-### Przygotowanie ostatecznego pliku bam
-Końcowym etapem tej części analizy jest przygotowanie ostatecznego pliku bam, który składa się z połączonych i przesortowanych plików *tophat/sample1/accepted_hits.bam* z analizy TopHat oraz */tmap/sample1.bam* z analizy TMAP. W celu utworzenia pliku bam można skorzystać narzędzi *samtools sort* oraz *samtools merge*. Dla porządku końcowy plik bam zostanie umieszczony w katalogu *bam*.
-Utworzenie katalogu *bam*:
-```sh
-mkdir bam
-```
-Połączenie oraz przesortowanie plików
-```sh
-samtools merge - tophat/sample1/accepted_hits.bam /tmap/sample1.bam | samtools sort - bam/sample1.bam
-```
 # Obliczenie poziomu ekspresji transkryptów.
 W tej części użyjemy narzędzia *Cufflinks* http://cole-trapnell-lab.github.io/cufflinks/releases/v2.2.1/.
 Dla porządku tworzymy katalog *cufflinks*, w którym znajdą się wynikowe pliki
