@@ -60,13 +60,13 @@ velvetg Merged/ -read_trkg yes -conserverLong yes
 ```
 
 # Ostateczny assembly
-W tym kroku złożymy transkrypty dla otrzymanych locusów. Transkrypty mają wiele izoform. Velvet tworzy osobny contig dla każdej izoformy. Potrzebne jest narzędzie, które zgrupowałyby trankrypty pochodzące z jednego locusa (genu). W tym celu użyjemy narzędzia oases. https://github.com/dzerbino/oases/tree/master
+W tym kroku złożymy transkrypty dla otrzymanych locusów. Transkrypty mają wiele izoform. Velvet tworzy osobny contig dla każdej izoformy. Potrzebne jest narzędzie, które zgrupowałyby transkrypty pochodzące z jednego locusa (genu). W tym celu użyjemy narzędzia oases. https://github.com/dzerbino/oases/tree/master
 ```sh
 oases Merged/ -merge -min_trans_lgth 200
 ```
 
-# Annotacja trankryptów
-Aby dowiedzieć się jakie baiłko kodują nasze trankrypty należy je porównać ze znanymi białkami lub transkryptami. Do tego posłuży nam program blast (blastx do białek i blastn do sekwencji nukleotydowych)
+# Annotacja transkryptów
+Aby dowiedzieć się jakie baiłko kodują nasze transkrypty należy je porównać ze znanymi białkami lub transkryptami. Do tego posłuży nam program blast (blastx do białek i blastn do sekwencji nukleotydowych)
 ```sh
 blastx -query Trinity.fasta -db nr -out blastx-Trinity.xml -evalue 1e-6 -num_threads 24 -max_target_seqs 1 -outfmt 
 ```
