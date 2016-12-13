@@ -35,8 +35,6 @@ Kolejne argumenty programu to :
 
 Narzędzie velveth utworzy katalogi *assembly/23-35*, w którym znajdą się wszystkie możliwe k-mery
 
-# Wykonanie alignmentu z wykorzystaniem różnych długości k-mer
-
 ### Wykonanie grafów de Bruijna narzędziem velvetg
 Uruchom program na wszystkich długościach
 ```sh
@@ -49,30 +47,41 @@ Kolejne argumenty programu to :
 
 Narzęrzie velvetg utworzy w katalogach *assembly/23-35* contigi w pliku contigs.fa
 
-### Mergowanie wyników
+### Przygotowanie zmergeowanego zestawu k-merów
 Przygotujemy k-mery ze zmergowanych contigów 
 ```sh
 velveth Merged 27 -long dir*/contigs.fa
 ```
 
-### Mergowanie wyników
+### Przygotowanie zmergeowanego zestawu contigów
 Drugie wykonanie contigów 
 ```sh
 velvetg Merged/ -read_trkg yes -conserverLong yes
 ```
 
 # Ostateczny assembly
-W tym kroku złożymy transkrypty dla otrzymanych locusów
+W tym kroku złożymy transkrypty dla otrzymanych locusów. Transkrypty mają wiele izoform. Velvet tworzy osobny contig dla każdej izoformy. Potrzebne jest narzędzie, które zgrupowałyby trankrypty pochodzące z jednego locusa (genu). W tym celu użyjemy narzędzia oases. https://github.com/dzerbino/oases/tree/master
 ```sh
 oases Merged/ -merge -min_trans_lgth 200
 ```
 
-# Zbudowanie genomu referencyjnego
+# Annotacja trankryptów
+Aby dowiedzieć się jakie baiłko kodują nasze trankrypty należy je porównać ze znanymi białkami lub transkryptami. Do tego posłuży nam program blast (blastx do białek i blastn do sekwencji nukleotydowych)
+```sh
+blastx -query Trinity.fasta -db nr -out blastx-Trinity.xml -evalue 1e-6 -num_threads 24 -max_target_seqs 1 -outfmt 
+```
+
+Niredundantną bazę białek można pobrać np. z Uniprota. Program tren zwraca xml. Gdy transkryptów nie ma za wiele, można skorzystać z blasta w wersji online.
+
+# Przygotowanie referencji
+Aby zliczyć odczyty przy pomocy oprogramowania bowtie. Trzeba najpierw przygotowac referencję. Plik fasta zostanie zindeksowany, co umożliwi szybkie jego wyszukiwanie
 ```sh
 bowtie2-build Merged/transcripts.fa transcripts
 ```
 
 # Uliniowienie odczytów do genomu referencyjnego
+Uliniowienie do transkryptomu, rożni się od uliniowienia do genomu. Gdy uliniawiamy odczyty pochodzące z sekwencjonowania z RNA do genomu musimy się liczyć z obecnością intronów.
+
 ```sh
 bowtie2 -x Merged/transcripts.fa -U fastq/sample1.fq.gz -S sample1
 ```
@@ -114,4 +123,4 @@ et <- exactTest(y)
 ### korekcja na wielokrotne testowanie
 fdr <- topTags(et, n = nrow(counts), sort.by = "none")
 ```
-W ten sposób otrzymujemy tabelę *annotation* oraz tebelę *FPKM.raw*. W obu tabelach transkrypty są uporządkowane w takiej samej kolejności.
+W ten sposób otrzymujemy tabelę *fdr*, którą następnie możemy wykorzystać do filtrowania wyników
