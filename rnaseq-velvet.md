@@ -5,37 +5,72 @@ Należy utworzyć katalog *fastq* i przekopiować do niego wszystkie pliki zawie
 mkdir fastq
 cp path/to/fastq/* fastq/
 ```
-### Przygotowanie genomu referencyjnego i annotacji
-Wszystkie referencyjne pliki potrzebne do przeprowadzenia analizy umieścić w katalogu *mm10*
+
+### Zlepienie odczytów
+Ze względu na ograniczony czas i RAM nie wykonamy tego kroku
 ```sh
-mkdir mm10
-cp -r path/to/reference/* mm10/
+cat fastq/sample1 fastq/sample2 > fastq.all
 ```
 
-# Uliniowienie odczytów do genomu referencyjnego
-W cel uliniwienia odczytów do genomu referencyjnego użyjemy narzędzia Tophat2: 
-* TopHat v.2 https://ccb.jhu.edu/software/tophat/index.shtml
+# Przygotowanie alignmentu z wykorzystaniem różnych długości k-mer
+W celu przygotowania alignmentu użyjemy narzędzia Velvet:
+* Velvet https://github.com/dzerbino/velvet/wiki/Manual
 
 
-### Uliniowienie narzędziem TopHat
-Utwórz katalog *tophat*, do niego zapisywane zostaną wszystkie pliki wygenerowane przez TopHat
+### Przygotowanie k-merów narzędziem velveth
+Utwórz katalog *assembly*, do niego zapisywane zostaną wszystkie pliki wygenerowane przez velvetg
 ```sh
-mkdir tophat
+mkdir assembly
 ```
-Następnie uruchom program (ciąg znaków *sample1* powinien zostać zamieniony na właściwą nazwę pliku fastq, który chcemy uniliowić)
+Następnie uruchom program (ciąg znaków *sample1* powinien zostać zamieniony na właściwą nazwę pliku fastq, który chcemy uliniowić)
 ```sh
-tophat --GTF mm10/mm10.tss.gtf -o tophat/sample1 mm10/fasta/genome fastq/sample1.fq.gz
+velveth assembly/ 23,35,2 -fastq.gz -short fastq/sample1.fq.gz
 ```
 Kolejne argumenty programu to :
 
-* mm10/mm10.tss.gtf - plik GTF zawierający annotajce
-* tophat/sample1 - katalog, w którym mają zostać zapisane wyniki
-* mm10/fasta/genome - genom referencyjny wraz z indeksem
+* 23,35,2 - dlugosci k-mer do alignmentu od,do,krok
+* assembly/ - katalog, w którym mają zostać zapisane wyniki
+* short - krótkie odczyty niesparowane
 * fastq/sample1.fq.gz - plik fastq, który ma zostać uliniowiony
 
-Narzęrzie TopHat utworzy katalog *tophat/sample1*, w którym znajdą się wynikowe pliki. Na potrzeby przykładu skupmy się tylko na dwóch wybranych:
-* plik *accepted_hits.bam* - zawiera uliniowione odczyty
-* plik *unmapped.fq* - zawiera nieuliniowione odczyty
+Narzędzie velveth utworzy katalogi *assembly/23-35*, w którym znajdą się wszystkie możliwe k-mery
+
+# Wykonanie alignmentu z wykorzystaniem różnych długości k-mer
+
+### Wykonanie grafów de Bruijna narzędziem velvetg
+Uruchom program na wszystkich długościach
+```sh
+for i in assembly*; do velvetg $i -read_trkg yes; done
+```
+Kolejne argumenty programu to :
+
+* $i - katalog, z którego czytane są pliki
+* read_trkg - assembly bogatszy w informacje
+
+Narzęrzie velvetg utworzy w katalogach *assembly/23-35* contigi w pliku contigs.fa
+
+### Mergowanie wyników
+Przygotujemy k-mery ze zmergowanych contigów 
+```sh
+velveth Merged 27 -long dir*/contigs.fa
+```
+
+### Mergowanie wyników
+Drugie wykonanie contigów 
+```sh
+velvetg Merged/ -read_trkg yes -conserverLong yes
+```
+
+# Ostateczny assembly
+W tym kroku złożymy transkrypty dla otrzymanych locusów
+```sh
+oases Merged/ -merge -min_trans_lgth 200
+```
+
+# Zbudowanie genomu referencyjnego
+```
+bowtie2-build Merged/transcripts.fa transcripts
+```
 
 # Obliczenie poziomu ekspresji transkryptów.
 W tej części użyjemy narzędzia *Cufflinks* http://cole-trapnell-lab.github.io/cufflinks/releases/v2.2.1/.
