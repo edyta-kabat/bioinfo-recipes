@@ -58,6 +58,25 @@ Program Cufflinks zwraca wiele plików, na potrzeby przykładu skupy się na wyb
 # Przeprowadzenie analizy na pozostałych próbkach
 Wszystkie wcześniej wymienione kroki (poza tworzeniem katalogów) należy powtórzyć dla wszystkich próbek.
 
+# Identyfikacja transkryptów o zmienionej ekspresji
+W tej części użyjemy narzędzia *cuffdiff* http://cole-trapnell-lab.github.io/cufflinks/cuffdiff/.
+Dla porządku tworzymy katalog *cuffdiff*, w którym znajdą się wynikowe pliki
+```sh 
+mkdir cuffdiff
+```
+Uruchamiamy program
+```sh
+cuffdiff -o cuffdiff mm10/mm10.tss.gtf bam/sample1.bam,bam/sample2.bam bam/sample3.bam,bam/sample4.bam
+```
+Poszczególne parametry to:
+* *mm10/mm10.tss.gtf* - annotacje; program obliczy poziomy ekspresji transkryptów zawartych w tym pliku
+* cuffdiff - katalog, w którym zostaną zapisane wynikowe pliki
+* bam/sample1.bam,bam/sample2.bam - zestaw próbek z pierwszej grupy
+* bam/sample3.bam,bam/sample4.bam - zestaw próbek z drugiej grupy
+
+Program Cufflinks zwraca wiele plików, na potrzeby przykładu skupy się na wybranym:
+* *isoforms.fpkm_tracking* - tabela ta zawiera wartości FPKM obliczone dla transkryptów oraz roznice w ekspresji trankryptów
+
 # Tworzenie tabeli z wartościami FPKM oraz tabeli z annotacjami
 Gdy wszystkie próbki zostały już uliniowione i zostały policzone dla nich poziomy ekspresji traksryptów, pomocne w dalszej analizie jest utworzenie zbiorczej tabeli zawierającej wartości FPKM dla każdej z próbek, oraz tabeli zawierającej annotacje. Można to zrobić za pomocą poniżeszgo skryptu.
 
