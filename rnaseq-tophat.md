@@ -42,6 +42,9 @@ Utworzenie indeksu pliku bam w celu wizualizacji przez IGV
 ```sh 
 samtools index tophat/sample/accepted_hits.bam
 ```
+ARgumenty:
+index - rodzaj uruchamianego programu
+tophat/sample/accepted_hits.bam - sciezka do indeksowanego pliku
 
 # Obliczenie poziomu ekspresji transkryptów.
 W tej części użyjemy narzędzia *Cufflinks* http://cole-trapnell-lab.github.io/cufflinks/releases/v2.2.1/.
