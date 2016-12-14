@@ -42,9 +42,17 @@ Utworzenie indeksu pliku bam w celu wizualizacji przez IGV
 ```sh 
 samtools index tophat/sample/accepted_hits.bam
 ```
-ARgumenty:
+Argumenty:
 index - rodzaj uruchamianego programu
 tophat/sample/accepted_hits.bam - sciezka do indeksowanego pliku
+
+# Tworzenie nowej sesji
+Nową sesję możemy utworzyć programeme screen
+```sh
+screen -R nazwa_sesji
+```
+CTRL+A i zaraz D - wyjście ze screen
+CTRL+A i zaraz [ - copy mode, umozliwia przewijanie ekranu
 
 # Obliczenie poziomu ekspresji transkryptów.
 W tej części użyjemy narzędzia *Cufflinks* http://cole-trapnell-lab.github.io/cufflinks/releases/v2.2.1/.
