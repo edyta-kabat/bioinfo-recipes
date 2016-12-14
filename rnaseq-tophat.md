@@ -37,6 +37,12 @@ Narzęrzie TopHat utworzy katalog *tophat/sample1*, w którym znajdą się wynik
 * plik *accepted_hits.bam* - zawiera uliniowione odczyty
 * plik *unmapped.fq* - zawiera nieuliniowione odczyty
 
+# Indeksowanie pliku bam
+Utworzenie indeksu pliku bam w celu wizualizacji przez IGV
+```sh 
+samtools index tophat/sample/accepted_hits.bam
+```
+
 # Obliczenie poziomu ekspresji transkryptów.
 W tej części użyjemy narzędzia *Cufflinks* http://cole-trapnell-lab.github.io/cufflinks/releases/v2.2.1/.
 Dla porządku tworzymy katalog *cufflinks*, w którym znajdą się wynikowe pliki
