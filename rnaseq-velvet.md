@@ -38,7 +38,7 @@ Narzędzie velveth utworzy katalogi *assembly/23-35*, w którym znajdą się wsz
 ### Wykonanie grafów de Bruijna narzędziem velvetg
 Uruchom program na wszystkich długościach
 ```sh
-for i in assembly*; do velvetg $i -read_trkg yes; done
+for i in assembly/*; do velvetg $i -read_trkg yes; done
 ```
 Kolejne argumenty programu to :
 
@@ -50,19 +50,19 @@ Narzęrzie velvetg utworzy w katalogach *assembly/23-35* contigi w pliku contigs
 ### Przygotowanie zmergeowanego zestawu k-merów
 Przygotujemy k-mery ze zmergowanych contigów 
 ```sh
-velveth Merged 27 -long dir*/contigs.fa
+velveth Merged 27 -long assembly/*/contigs.fa
 ```
 
 ### Przygotowanie zmergeowanego zestawu contigów
 Drugie wykonanie contigów 
 ```sh
-velvetg Merged/ -read_trkg yes -conserverLong yes
+velvetg Merged/ -read_trkg yes -conserveLong yes
 ```
 
 # Ostateczny assembly
 W tym kroku złożymy transkrypty dla otrzymanych locusów. Transkrypty mają wiele izoform. Velvet tworzy osobny contig dla każdej izoformy. Potrzebne jest narzędzie, które zgrupowałyby transkrypty pochodzące z jednego locusa (genu). W tym celu użyjemy narzędzia oases. https://github.com/dzerbino/oases/tree/master
 ```sh
-oases Merged/ -merge -min_trans_lgth 200
+oases Merged/ -merge yes -min_trans_lgth 200
 ```
 
 # Annotacja transkryptów
@@ -76,14 +76,14 @@ Niredundantną bazę białek można pobrać np. z Uniprota. Program tren zwraca 
 # Przygotowanie referencji
 Aby zliczyć odczyty przy pomocy oprogramowania bowtie. Trzeba najpierw przygotowac referencję. Plik fasta zostanie zindeksowany, co umożliwi szybkie jego wyszukiwanie
 ```sh
-bowtie2-build Merged/transcripts.fa transcripts
+bowtie2-build Merged/transcripts.fa Merged/transcripts
 ```
 
 # Uliniowienie odczytów do genomu referencyjnego
 Uliniowienie do transkryptomu, rożni się od uliniowienia do genomu. Gdy uliniawiamy odczyty pochodzące z sekwencjonowania z RNA do genomu musimy się liczyć z obecnością intronów.
 
 ```sh
-bowtie2 -x Merged/transcripts.fa -U fastq/sample1.fq.gz -S sample1
+for i in `ls fastq/*.gz`; do bowtie2 -x Merged/transcripts -U $i | samtools view -bS - | samtools sort - > $i.bam; samtools index $i.bam; done; mkdir bowtie; mv fastq/*.bam* bowtie/
 ```
 
 # Obliczenie poziomu ekspresji transkryptów.
