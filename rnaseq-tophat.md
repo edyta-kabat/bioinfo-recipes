@@ -24,7 +24,7 @@ mkdir tophat
 ```
 Następnie uruchom program (ciąg znaków *sample1* powinien zostać zamieniony na właściwą nazwę pliku fastq, który chcemy uniliowić)
 ```sh
-tophat2 --GTF mm10/mm10.tss.gtf -o tophat/sample1 mm10/fasta/genome fastq/sample1.fq.gz
+tophat2 -p 6 --GTF mm10/mm10.tss.gtf -o tophat/sample1 mm10/fasta/genome fastq/sample1.fq.gz
 ```
 Kolejne argumenty programu to :
 
