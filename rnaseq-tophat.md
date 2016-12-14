@@ -91,6 +91,8 @@ Poszczególne parametry to:
 * bam/sample1.bam,bam/sample2.bam - zestaw próbek z pierwszej grupy
 * bam/sample3.bam,bam/sample4.bam - zestaw próbek z drugiej grupy
 
+Przecinkami oddzielamy próbki z danej grupy. Spacją oddzielamy grupy.
+
 Program Cufflinks zwraca wiele plików, na potrzeby przykładu skupy się na wybranym:
 * *isoforms.fpkm_tracking* - tabela ta zawiera wartości FPKM obliczone dla transkryptów oraz roznice w ekspresji trankryptów
 
