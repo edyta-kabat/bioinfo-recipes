@@ -120,13 +120,15 @@ W ten sposób otrzymujemy tabelę *annotation* oraz tebelę *FPKM.raw*. W obu ta
 ### Przygotowanie danych
 Dalszą analizę wygodnie jest przeprowadzić w programie **R**. W pierwszej kolejności należy wczytać wcześniej utworzone tabele
 ```r
-annotation = read.table("path/to/file/annotation", sep = "\t", header = T)
-FPKM.raw = read.table("path/to/file/FPKM.raw", sep = "\t", header = T)
+annotation = read.table("../annotation", sep = "\t", header = T, colClasses = "character")
+FPKM.raw = read.table("../FPKM.raw", sep = "\t", header = T, row.names = 1, colClasses = c("character", rep("numeric", 10)))
 ```
-Dobrze jest nadać wierszom tabeli *FPKM.raw* nazwy transkryptów
-```r
-rownames(FPKM.raw) = annotaion&tracking_id
-```
+
+colClasses mówi nam o typie danych w kolumnie
+row.names mówi nam o tym, w której kolumnie są nazwy wierszy
+sep to rodzaj użytego separatora
+header mówi nam czy w pliku jest nagłówek
+
 
 ### Analiza statystyczna
 W celach przeprowadzenia analizy statystycznej, napierw utówrzmy tabelę zawierającą zlogarytmowane wartości FPKM. 
