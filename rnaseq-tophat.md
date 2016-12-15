@@ -102,7 +102,7 @@ Gdy wszystkie próbki zostały już uliniowione i zostały policzone dla nich po
 ```sh
 cat cufflinks/sample1/isoforms.fpkm_tracking | head -1 | cut -f1-6 > annotation
 cat cufflinks/sample1/isoforms.fpkm_tracking | tail -n+2 | sort -k1 | cut -f1-6 >> annotation
-touch FPKM.tmp
+cat annotation | cut -f1 > FPKM.tmp
 
 for i in `ls cufflinks`
     do
