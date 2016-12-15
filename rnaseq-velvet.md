@@ -131,3 +131,12 @@ et <- exactTest(y)
 fdr <- topTags(et, n = nrow(counts), sort.by = "none")
 ```
 W ten sposób otrzymujemy tabelę *fdr*, którą następnie możemy wykorzystać do filtrowania wyników
+
+
+Pakiety można doinstalować komendami
+```sh
+setRepositories()
+### wybrać 1 2
+install.packages("edgeR")
+### wybrac server cloud czyli nr 1
+```
