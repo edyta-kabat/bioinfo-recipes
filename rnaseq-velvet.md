@@ -87,13 +87,9 @@ for i in `ls fastq/*.gz`; do bowtie2 -x Merged/transcripts -U $i | samtools view
 ```
 
 # Obliczenie poziomu ekspresji transkryptów.
-W tej części użyjemy narzędzia *samtools*
-```sh 
-mkdir exprs
-```
-Uruchamiamy program
+W tej części użyjemy narzędzia *samtools*. Samtool jest pakietem, w ktorym znajduje się wiele narzędzi. Jednym z nich jest idxstats, które wypisuje informację o ilości odczytów uliniowionych do każdego contigu. 
 ```sh
-samtools idxstats sample1.sam > exprs/sample1
+mkdir counts; echo "anno" > counts/header; samtools idxstats bowtie/A1_CTRL_trimmed.fq.gz.bam | cut -f1 > counts/counts; for i in `ls bowtie/*.bam`; do echo $i >> counts/header; samtools idxstats $i | cut -f3 | paste counts/counts - > counts.tmp; mv counts.tmp counts/counts; done; cat counts/counts | grep -v "*" > counts/counts.final
 ```
 
 # Przeprowadzenie analizy na pozostałych próbkach
