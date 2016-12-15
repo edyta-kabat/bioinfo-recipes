@@ -91,7 +91,15 @@ Uliniawiamy odczyty do genomu refrencyjnego. Bowtie2 jako argumenty przyjmuje -x
 # Obliczenie poziomu ekspresji transkryptów.
 W tej części użyjemy narzędzia *samtools*. Samtool jest pakietem, w ktorym znajduje się wiele narzędzi. Jednym z nich jest idxstats, które wypisuje informację o ilości odczytów uliniowionych do każdego contigu. 
 ```sh
-mkdir counts; echo "anno" > counts/header; samtools idxstats bowtie/A1_CTRL_trimmed.fq.gz.bam | cut -f1 > counts/counts; for i in `ls bowtie/*.bam`; do echo $i >> counts/header; samtools idxstats $i | cut -f3 | paste counts/counts - > counts.tmp; mv counts.tmp counts/counts; done; cat counts/counts | grep -v "*" > counts/counts.final
+# utworzenie katalogu
+mkdir counts
+# zapoczątkowanie naglowka pliku z wynikami
+echo "anno" > counts/header
+# wrzucenie nazw contigów do pliku z ze zliczeniami
+samtools idxstats bowtie/A1_CTRL_trimmed.fq.gz.bam | cut -f1 > counts/counts
+# utworzenie pliku ze zliczeniami
+for i in `ls bowtie/*.bam`; do echo $i >> counts/header; samtools idxstats $i | cut -f3 | paste counts/counts - > counts.tmp; mv counts.tmp counts/counts; done
+cat counts/counts | grep -v "*" > counts/counts.final
 ```
 
 # Przeprowadzenie analizy na pozostałych próbkach
