@@ -116,7 +116,6 @@ counts <- (read.table("~/html/rnaseq/counts/counts", colClasses = c("character",
 ### pr<yporządkowujemy kolumny do grup
 group <- as.factor(rep(c("ctrl", "dex"), 5))
 colnames(counts) <- paste(rep(c("ctrl", "dex"), 5), rep(1:5, each = 2), sep = "")
-colnames(counts) <- c("ctrl1", "dex1")
 ### budujemy model
 require(edgeR)
 y <- DGEList(counts=counts,group=group)
