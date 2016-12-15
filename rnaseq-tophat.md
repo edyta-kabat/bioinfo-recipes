@@ -108,7 +108,7 @@ for i in `ls cufflinks`
     do
         echo $i > tmp.data
         cat cufflinks/$i/isoforms.fpkm_tracking | tail -n+2 | sort -k1 | cut -f10 >> tmp.data
-        paste -d"\t" FPKM.tmp tmp.data > FPKM.raw
+        paste FPKM.tmp tmp.data > FPKM.raw
         cat FPKM.raw > FPKM.tmp
     done
     
