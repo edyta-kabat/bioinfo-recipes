@@ -114,7 +114,7 @@ anno <- read.table("~/html/counts/counts.final", colClasses = "character")[,1]
 ### wybieramy kolumnę z danymi dla każdej próbki
 counts <- (read.table("~/html/counts/counts.final", colClasses = c("character",rep("numeric",10)))[,2:11])
 ### pr<yporządkowujemy kolumny do grup
-group = as.factor(rep(c("ASTR","CTRL"),5))
+group = as.factor(rep(c("CTRL","DEX"),5))
 ### budujemy model
 require(edgeR)
 y <- DGEList(counts=counts,group=group)
