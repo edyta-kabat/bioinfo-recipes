@@ -124,6 +124,9 @@ y <- calcNormFactors(y)
 ### obliczenie macierzy prawdopodobienstwa
 design <- model.matrix(~group)
 y <- estimateDisp(y,design)
+### obliczenie znormalizowanych wartości ekspresji
+y <- estimateCommonDisp(y)
+pseudo.counts <- y$pseudo.counts
 ### obliczenie statystyki
 et <- exactTest(y)
 ### korekcja na wielokrotne testowanie
