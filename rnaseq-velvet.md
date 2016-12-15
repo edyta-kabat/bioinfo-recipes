@@ -104,19 +104,18 @@ Gdy wszystkie próbki zostały już uliniowione i zostały policzone dla nich po
 
 ```sh
 ### jedna z kolumn wczytywanego pliku powinna stanowić annotacje transkryptów
-anno <- <- read.table("sample.file1", colClasses = "character")[,1]
+anno <- read.table("~/html/counts/counts.final", colClasses = "character")[,1]
 ### wybieramy kolumnę z danymi dla każdej próbki
-sample1 <- as.numeric(read.table("sample.file1", colClasses = "character")[,2])
-sample2 <- as.numeric(read.table("sample.file2", colClasses = "character")[,2])
-### mergujemy wszystkie kolumny
-counts <- cbind(sample1, sample2, sample3)
+counts <- (read.table("~/html/counts/counts.final", colClasses = c("character",rep("numeric",10)))[,2:11])
 ### pr<yporządkowujemy kolumny do grup
-group = as.factor(c(1,1,1,2,2,2))
+group = as.factor(rep(c("ASTR","CTRL"),5))
 ### budujemy model
+require(edgeR)
 y <- DGEList(counts=counts,group=group)
 ### liczymy normalizację
 y <- calcNormFactors(y)
 ### obliczenie macierzy prawdopodobienstwa
+design <- model.matrix(~group)
 y <- estimateDisp(y,design)
 ### obliczenie statystyki
 et <- exactTest(y)
