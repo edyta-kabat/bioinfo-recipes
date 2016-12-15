@@ -85,6 +85,8 @@ Uliniowienie do transkryptomu, rożni się od uliniowienia do genomu. Gdy ulinia
 ```sh
 for i in `ls fastq/*.gz`; do bowtie2 -x Merged/transcripts -U $i | samtools view -bS - | samtools sort - > $i.bam; samtools index $i.bam; done; mkdir bowtie; mv fastq/*.bam* bowtie/
 ```
+Uliniawiamy odczyty do genomu refrencyjnego. Bowtie2 jako argumenty przyjmuje -x czyli indeks do genomu oraz -U ze ścieżką do pliku fastq. Bowtie2 zwraca wynik w formacie SAM. Następnie program samtools view z opcją -b zamienia SAM na BAM. Kreseczka w opcjach programu samtools oznacza wejście standardowe zamiast ścieżki do pliku. Następnie plik jest sortowany. Sortowanie jest konieczne do zrobienia indeksu. Następnie indeksujemy plik.
+
 
 # Obliczenie poziomu ekspresji transkryptów.
 W tej części użyjemy narzędzia *samtools*. Samtool jest pakietem, w ktorym znajduje się wiele narzędzi. Jednym z nich jest idxstats, które wypisuje informację o ilości odczytów uliniowionych do każdego contigu. 
