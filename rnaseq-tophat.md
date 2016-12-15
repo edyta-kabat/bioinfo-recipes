@@ -142,6 +142,10 @@ Kroki podstawowej analizy statystycznej
 ```r
 pValue = apply(FPKM.log, 1, function(x){
     t.test(x[indeksy dla 1. grupy], x[indeksy dla 2. grupy], var.equal = T)$p.value})
+### alternatywnie mozna utworzyć wektor z czynnikiem (przyporządkowaniem do grupy) oraz użyć go do funkcji t.test jako specyfikacji modelu statystycznej    
+group <- as.factor(substr(colnames(FPKM.log), 1, 3))
+pValue = apply(FPKM.log, 1, function(x){
+  t.test(x~group, var.equal = T)$p.value})
 ```
 gdzie *indeksy dla 1. grupy* oznaczają numery kolumn, w których znajdują się próbki z pierwszej grupy ekperymentalnej, *indeksy dla 2. grupy* oznaczają numery kolumn, w których znajdują się próbki z drugiej grupy ekperymentalnej.
 
