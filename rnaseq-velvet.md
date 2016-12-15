@@ -110,9 +110,9 @@ Gdy wszystkie próbki zostały już uliniowione i zostały policzone dla nich po
 
 ```sh
 ### jedna z kolumn wczytywanego pliku powinna stanowić annotacje transkryptów
-anno <- read.table("~/html/counts/counts.final", colClasses = "character")[,1]
+anno <- read.table("~/html/counts/counts", colClasses = "character")[,1]
 ### wybieramy kolumnę z danymi dla każdej próbki
-counts <- (read.table("~/html/counts/counts.final", colClasses = c("character",rep("numeric",10)))[,2:11])
+counts <- (read.table("~/html/counts/counts", colClasses = c("character",rep("numeric",10)))[,2:11])
 ### pr<yporządkowujemy kolumny do grup
 group = as.factor(rep(c("CTRL","DEX"),5))
 ### budujemy model
