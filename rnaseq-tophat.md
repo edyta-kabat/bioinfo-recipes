@@ -160,6 +160,7 @@ wh = which(fdr < 0.01)
 ```
 Tak wybrane traksrypty można przedstawić na mapie cieplnej
 ```r
+require(gplots)
 heatmap.2(
   FPKM.log[wh, ],
   hclustfun = function(x) hclust(x, method = "average"),
