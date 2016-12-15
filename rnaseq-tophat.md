@@ -156,20 +156,25 @@ fdr = p.adjust(pValue, method = "fdr")
 ### Wizualizacja wyników
 Uzyskane wyniki (traskrypty, których poziomy ekspresji różnią się między grupami) można przedstawić na tak zwanej mapie cieplnej. W tym celu należy wybrać transkrypty, których wartość *fdr* jest miejsza od jakieś zadanej, na przykład 0.01
 ```r
-wh = which(fdr < 0.01)
+wh = which(fdr < 0.1)
 ```
 Tak wybrane traksrypty można przedstawić na mapie cieplnej
 ```r
 require(gplots)
+dev.off()
 heatmap.2(
-  FPKM.log[wh, ],
+  as.matrix(FPKM.log[wh, ]),
   hclustfun = function(x) hclust(x, method = "average"),
   distfun = function(x) as.dist(1-cor(t(x))),  
   col = bluered(50), 
   scale = 'row', 
   trace = "none",
-  Colv = NA
+  margins = c(8,16)
 )
+
+###podejrzenie annotacji dla istotnych transkryptów
+annotations[wh,]
+
 ```
 
 
