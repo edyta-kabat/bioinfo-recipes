@@ -134,7 +134,7 @@ header mówi nam czy w pliku jest nagłówek
 W celach przeprowadzenia analizy statystycznej, napierw utówrzmy tabelę zawierającą zlogarytmowane wartości FPKM. 
 
 ```r
-FPKM.log = log(FPKM.raw, 2)
+FPKM.log = log(1 + FPKM.raw, 2)
 ```
 
 Kroki podstawowej analizy statystycznej
