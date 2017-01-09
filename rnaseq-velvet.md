@@ -5,150 +5,140 @@ Należy utworzyć katalog *fastq* i przekopiować do niego wszystkie pliki zawie
 mkdir fastq
 cp path/to/fastq/* fastq/
 ```
-### Przygotowanie genomu referencyjnego i annotacji
-Wszystkie referencyjne pliki potrzebne do przeprowadzenia analizy umieścić w katalogu *mm10*
+
+### Zlepienie odczytów
+Ze względu na ograniczony czas i RAM nie wykonamy tego kroku
 ```sh
-mkdir mm10
-cp -r path/to/reference/* mm10/
+cat fastq/sample1 fastq/sample2 > fastq.all
 ```
 
-# Uliniowienie odczytów do genomu referencyjnego
-W cel uliniwienia odczytów do genomu referencyjnego użyjemy narzędzia Tophat2: 
-* TopHat v.2 https://ccb.jhu.edu/software/tophat/index.shtml
+# Przygotowanie alignmentu z wykorzystaniem różnych długości k-mer
+W celu przygotowania alignmentu użyjemy narzędzia Velvet:
+* Velvet https://github.com/dzerbino/velvet/wiki/Manual
 
 
-### Uliniowienie narzędziem TopHat
-Utwórz katalog *tophat*, do niego zapisywane zostaną wszystkie pliki wygenerowane przez TopHat
+### Przygotowanie k-merów narzędziem velveth
+Utwórz katalog *assembly*, do niego zapisywane zostaną wszystkie pliki wygenerowane przez velvetg
 ```sh
-mkdir tophat
+mkdir assembly
 ```
-Następnie uruchom program (ciąg znaków *sample1* powinien zostać zamieniony na właściwą nazwę pliku fastq, który chcemy uniliowić)
+Następnie uruchom program (ciąg znaków *sample1* powinien zostać zamieniony na właściwą nazwę pliku fastq, który chcemy uliniowić)
 ```sh
-tophat --GTF mm10/mm10.tss.gtf -o tophat/sample1 mm10/fasta/genome fastq/sample1.fq.gz
+velveth assembly/ 23,35,2 -fastq.gz -short fastq/sample1.fq.gz
 ```
 Kolejne argumenty programu to :
 
-* mm10/mm10.tss.gtf - plik GTF zawierający annotajce
-* tophat/sample1 - katalog, w którym mają zostać zapisane wyniki
-* mm10/fasta/genome - genom referencyjny wraz z indeksem
+* 23,35,2 - dlugosci k-mer do alignmentu od,do,krok
+* assembly/ - katalog, w którym mają zostać zapisane wyniki
+* short - krótkie odczyty niesparowane
 * fastq/sample1.fq.gz - plik fastq, który ma zostać uliniowiony
 
-Narzęrzie TopHat utworzy katalog *tophat/sample1*, w którym znajdą się wynikowe pliki. Na potrzeby przykładu skupmy się tylko na dwóch wybranych:
-* plik *accepted_hits.bam* - zawiera uliniowione odczyty
-* plik *unmapped.fq* - zawiera nieuliniowione odczyty
+Narzędzie velveth utworzy katalogi *assembly/23-35*, w którym znajdą się wszystkie możliwe k-mery
+
+### Wykonanie grafów de Bruijna narzędziem velvetg
+Uruchom program na wszystkich długościach
+```sh
+for i in assembly/*; do velvetg $i -read_trkg yes; done
+```
+Kolejne argumenty programu to :
+
+* $i - katalog, z którego czytane są pliki
+* read_trkg - assembly bogatszy w informacje
+
+Narzęrzie velvetg utworzy w katalogach *assembly/23-35* contigi w pliku contigs.fa
+
+### Przygotowanie zmergeowanego zestawu k-merów
+Przygotujemy k-mery ze zmergowanych contigów 
+```sh
+velveth Merged 27 -long assembly/*/contigs.fa
+```
+
+### Przygotowanie zmergeowanego zestawu contigów
+Drugie wykonanie contigów 
+```sh
+velvetg Merged/ -read_trkg yes -conserveLong yes
+```
+
+# Ostateczny assembly
+W tym kroku złożymy transkrypty dla otrzymanych locusów. Transkrypty mają wiele izoform. Velvet tworzy osobny contig dla każdej izoformy. Potrzebne jest narzędzie, które zgrupowałyby transkrypty pochodzące z jednego locusa (genu). W tym celu użyjemy narzędzia oases. https://github.com/dzerbino/oases/tree/master
+```sh
+oases Merged/ -merge yes -min_trans_lgth 200
+```
+
+# Annotacja transkryptów
+Aby dowiedzieć się jakie baiłko kodują nasze transkrypty należy je porównać ze znanymi białkami lub transkryptami. Do tego posłuży nam program blast (blastx do białek i blastn do sekwencji nukleotydowych)
+```sh
+blastx -query Trinity.fasta -db nr -out blastx-Trinity.xml -evalue 1e-6 -num_threads 24 -max_target_seqs 1 -outfmt 
+```
+
+Niredundantną bazę białek można pobrać np. z Uniprota. Program tren zwraca xml. Gdy transkryptów nie ma za wiele, można skorzystać z blasta w wersji online.
+
+# Przygotowanie referencji
+Aby zliczyć odczyty przy pomocy oprogramowania bowtie. Trzeba najpierw przygotowac referencję. Plik fasta zostanie zindeksowany, co umożliwi szybkie jego wyszukiwanie
+```sh
+bowtie2-build Merged/transcripts.fa Merged/transcripts
+```
+
+# Uliniowienie odczytów do genomu referencyjnego
+Uliniowienie do transkryptomu, rożni się od uliniowienia do genomu. Gdy uliniawiamy odczyty pochodzące z sekwencjonowania z RNA do genomu musimy się liczyć z obecnością intronów.
+
+```sh
+for i in `ls fastq/*.gz`; do bowtie2 -x Merged/transcripts -U $i | samtools view -bS - | samtools sort - > $i.bam; samtools index $i.bam; done; mkdir bowtie; mv fastq/*.bam* bowtie/
+```
+Uliniawiamy odczyty do genomu refrencyjnego. Bowtie2 jako argumenty przyjmuje -x czyli indeks do genomu oraz -U ze ścieżką do pliku fastq. Bowtie2 zwraca wynik w formacie SAM. Następnie program samtools view z opcją -b zamienia SAM na BAM. Kreseczka w opcjach programu samtools oznacza wejście standardowe zamiast ścieżki do pliku. Następnie plik jest sortowany. Sortowanie jest konieczne do zrobienia indeksu. Następnie indeksujemy plik.
+
 
 # Obliczenie poziomu ekspresji transkryptów.
-W tej części użyjemy narzędzia *Cufflinks* http://cole-trapnell-lab.github.io/cufflinks/releases/v2.2.1/.
-Dla porządku tworzymy katalog *cufflinks*, w którym znajdą się wynikowe pliki
-```sh 
-mkdir cufflinks
-```
-Uruchamiamy program
+W tej części użyjemy narzędzia *samtools*. Samtool jest pakietem, w ktorym znajduje się wiele narzędzi. Jednym z nich jest idxstats, które wypisuje informację o ilości odczytów uliniowionych do każdego contigu. 
 ```sh
-cufflinks -G mm10/mm10.tss.gtf -o cufflinks/sample1 bam/sample1.bam
+# utworzenie katalogu
+mkdir counts
+# zapoczątkowanie naglowka pliku z wynikami
+echo "anno" > counts/header
+# wrzucenie nazw contigów do pliku z ze zliczeniami
+samtools idxstats bowtie/A1_CTRL_trimmed.fq.gz.bam | cut -f1 > counts/counts
+# utworzenie pliku ze zliczeniami
+for i in `ls bowtie/*.bam`; do echo $i >> counts/header; samtools idxstats $i | cut -f3 | paste counts/counts - > counts.tmp; mv counts.tmp counts/counts; done
+cat counts/counts | grep -v "*" > counts/counts.final
 ```
-Poszczególne parametry to:
-* *mm10/mm10.tss.gtf* - annotacje; program obliczy poziomy ekspresji transkryptów zawartych w tym pliku
-* cufflinks/sample1 - katalog, w którym zostaną zapisane wynikowe pliki
-* bam/sample1.bam - uliniowiona próbka, dla której chcemy obliczyć poziomy ekspresji transkryptów
-
-Program Cufflinks zwraca wiele plików, na potrzeby przykładu skupy się na wybranym:
-* *isoforms.fpkm_tracking* - tabela ta zawiera wartości FPKM obliczone dla transkryptów.
 
 # Przeprowadzenie analizy na pozostałych próbkach
 Wszystkie wcześniej wymienione kroki (poza tworzeniem katalogów) należy powtórzyć dla wszystkich próbek.
 
-# Identyfikacja transkryptów o zmienionej ekspresji
-W tej części użyjemy narzędzia *cuffdiff* http://cole-trapnell-lab.github.io/cufflinks/cuffdiff/.
-Dla porządku tworzymy katalog *cuffdiff*, w którym znajdą się wynikowe pliki
-```sh 
-mkdir cuffdiff
-```
-Uruchamiamy program
-```sh
-cuffdiff -o cuffdiff mm10/mm10.tss.gtf bam/sample1.bam,bam/sample2.bam bam/sample3.bam,bam/sample4.bam
-```
-Poszczególne parametry to:
-* *mm10/mm10.tss.gtf* - annotacje; program obliczy poziomy ekspresji transkryptów zawartych w tym pliku
-* cuffdiff - katalog, w którym zostaną zapisane wynikowe pliki
-* bam/sample1.bam,bam/sample2.bam - zestaw próbek z pierwszej grupy
-* bam/sample3.bam,bam/sample4.bam - zestaw próbek z drugiej grupy
-
-Program Cufflinks zwraca wiele plików, na potrzeby przykładu skupy się na wybranym:
-* *isoforms.fpkm_tracking* - tabela ta zawiera wartości FPKM obliczone dla transkryptów oraz roznice w ekspresji trankryptów
-
-# Tworzenie tabeli z wartościami FPKM oraz tabeli z annotacjami
-Gdy wszystkie próbki zostały już uliniowione i zostały policzone dla nich poziomy ekspresji traksryptów, pomocne w dalszej analizie jest utworzenie zbiorczej tabeli zawierającej wartości FPKM dla każdej z próbek, oraz tabeli zawierającej annotacje. Można to zrobić za pomocą poniżeszgo skryptu.
+# Analiza statystyczna EdgeR
+Gdy wszystkie próbki zostały już uliniowione i zostały policzone dla nich poziomy ekspresji traksryptów, możemy wykonać analizę statystyczną przy pomocy programu edgeR w R. EdgeR można wykorzystywać do zmiennych dyskretnych o rozkłądzie bini
 
 ```sh
-cat cufflinks/sample1/isoforms.fpkm_tracking | head -1 | cut -f1-6 > annotation
-cat cufflinks/sample1/isoforms.fpkm_tracking | tail -n+2 | sort -k1 | cut -f1-6 >> annotation
-touch FPKM.tmp
-
-for i in `ls cufflinks`
-    do
-        echo $i > tmp.data
-        cat cufflinks/$i/isoforms.fpkm_tracking | tail -n+2 | sort -k1 | cut -f10 >> tmp.data
-        paste -d"\t" FPKM.tmp tmp.data > FPKM.raw
-        cat FPKM.raw > FPKM.tmp
-    done
-    
-rm FPKM.tmp && rm tmp.data
+### jedna z kolumn wczytywanego pliku powinna stanowić annotacje transkryptów
+anno <- read.table("~/html/rnaseq/counts/counts", colClasses = "character")[,1]
+### wybieramy kolumnę z danymi dla każdej próbki
+counts <- (read.table("~/html/rnaseq/counts/counts", colClasses = c("character",rep("numeric",10)))[,2:11])
+### pr<yporządkowujemy kolumny do grup
+group <- as.factor(rep(c("ctrl", "dex"), 5))
+colnames(counts) <- paste(rep(c("ctrl", "dex"), 5), rep(1:5, each = 2), sep = "")
+### budujemy model
+require(edgeR)
+y <- DGEList(counts=counts,group=group)
+### liczymy normalizację
+y <- calcNormFactors(y)
+### obliczenie macierzy prawdopodobienstwa
+design <- model.matrix(~group)
+y <- estimateDisp(y,design)
+### obliczenie znormalizowanych wartości ekspresji
+y <- estimateCommonDisp(y)
+pseudo.counts <- y$pseudo.counts
+### obliczenie statystyki
+et <- exactTest(y)
+### korekcja na wielokrotne testowanie
+fdr <- topTags(et, n = nrow(counts), sort.by = "none")
 ```
-W ten sposób otrzymujemy tabelę *annotation* oraz tebelę *FPKM.raw*. W obu tabelach transkrypty są uporządkowane w takiej samej kolejności.
+W ten sposób otrzymujemy tabelę *fdr*, którą następnie możemy wykorzystać do filtrowania wyników
 
-# Analiza w programie R
-### Przygotowanie danych
-Dalszą analizę wygodnie jest przeprowadzić w programie **R**. W pierwszej kolejności należy wczytać wcześniej utworzone tabele
-```r
-annotation = read.table("path/to/file/annotation", sep = "\t", header = T)
-FPKM.raw = read.table("path/to/file/FPKM.raw", sep = "\t", header = T)
+
+Pakiety można doinstalować komendami
+```sh
+setRepositories()
+### wybrać 1 2
+install.packages("edgeR")
+### wybrac server cloud czyli nr 1
 ```
-Dobrze jest nadać wierszom tabeli *FPKM.raw* nazwy transkryptów
-```r
-rownames(FPKM.raw) = annotaion&tracking_id
-```
-
-### Analiza statystyczna
-W celach przeprowadzenia analizy statystycznej, napierw utówrzmy tabelę zawierającą zlogarytmowane wartości FPKM. 
-
-```r
-FPKM.log = log(FPKM.raw, 2)
-```
-
-Kroki podstawowej analizy statystycznej
-1. Przeprowadzenie testu T-Studenta, wybranie z wyniku analizy wartości *p-value*
-```r
-pValue = apply(FPKM.log, 1, function(x){
-    t.test(x[indeksy dla 1. grupy], x[indeksy dla 2. grupy], var.equal = T)$p.value})
-```
-gdzie *indeksy dla 1. grupy* oznaczają numery kolumn, w których znajdują się próbki z pierwszej grupy ekperymentalnej, *indeksy dla 2. grupy* oznaczają numery kolumn, w których znajdują się próbki z drugiej grupy ekperymentalnej.
-
-2. Obliczenie skorygowanej wartości *p.value*
-```r
-fdr = p.adjust(pValue, method = "fdr")
-```
-### Wizualizacja wyników
-Uzyskane wyniki (traskrypty, których poziomy ekspresji różnią się między grupami) można przedstawić na tak zwanej mapie cieplnej. W tym celu należy wybrać transkrypty, których wartość *fdr* jest miejsza od jakieś zadanej, na przykład 0.01
-```r
-wh = which(fdr < 0.01)
-```
-Tak wybrane traksrypty można przedstawić na mapie cieplnej
-```r
-heatmap.2(
-  FPKM.log[wh, ],
-  hclustfun = function(x) hclust(x, method = "average"),
-  distfun = function(x) as.dist(1-cor(t(x))),  
-  col = bluered(50), 
-  scale = 'row', 
-  trace = "none",
-  Colv = NA
-)
-```
-
-
-
-
-
-
-
