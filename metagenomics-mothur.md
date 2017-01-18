@@ -149,7 +149,7 @@ Mean:	16259.6	23682.3	157.332	0	3.20662
 ### Filtrowanie
 Przefiltrowanie uliniowionych odczytów wg kryteriów narzuconych przed użytkownika
 ```sh
-mothur > screen.seqs(fasta=PRJDB2729.shhh.trim.unique.align, count=PRJDB2729.shhh.trim.count_table, end=0, maxhomop=8) 
+# mothur > screen.seqs(fasta=PRJDB2729.shhh.trim.unique.align, count=PRJDB2729.shhh.trim.count_table, end=0, maxhomop=8) 
 # lub bardziej restrykcyjnie by przyspieszyc
 mothur > screen.seqs(fasta=PRJDB2729.shhh.trim.unique.align, count=PRJDB2729.shhh.trim.count_table, minlength=287, maxlength=306, end=25300, start=13130, maxhomop=5)
 ```
@@ -288,48 +288,48 @@ Plik wynikowy:
 
 # Analiza w programie R
 ## Przygotowanie danych 
-###Wczytanie potrzebnych bibliotek
+Wczytanie potrzebnych bibliotek
 ```r
 library(magrittr)
 library(ggplot2)
 ```
 
-### wczytanie tabeli zawierającej zliczenia odczytów 
+Wczytanie tabeli zawierającej zliczenia odczytów 
 ```r
 countTable = read.table("../PRJDB2729_final.0.01.subsample.shared", header = T, row.names = 2, colClasses = c(rep("character", 3), rep("numeric", 5766)))
 ```
-# usuniecie pierwszych 2 kolumn i transpozycja tabeli
+Usuniecie pierwszych 2 kolumn i transpozycja tabeli
 ```r
 countTable = countTable[, -(1:2)] %>% t() %>% data.frame()
 ```
-# wczytanie pliku z informacjami o próbkach
+Wczytanie pliku z informacjami o próbkach
 ```r
 sampleInfo = read.table("../sampleInfo.csv", sep = ";", header = T, colClasses = "character")
 ```
-# posortowanie wierszy tabeli "sampleInfo" (przyda się w dalszej części) i dla porzdku kolumn "countTable"
+Posortowanie wierszy tabeli "sampleInfo" (przyda się w dalszej części) i dla porzadku kolumn "countTable"
 ```r
 sampleInfo = sampleInfo[order(sampleInfo$Treatment), ]
 countTable = countTable[, match(sampleInfo$Sample_ID, colnames(countTable))]
 ```
-# wczytanie tabeli zawierającej taksonomiczne informacje dla OTU
+Wczytanie tabeli zawierającej taksonomiczne informacje dla OTU
 ```r
 taxInfo = read.table('../PRJDB2729_final.cons.taxonomy', header=T, sep='\t', colClasses = "character")
 ```
-# posortowanie wierszy w tabeli "taxInfo" tak jak są posortowane w "countTable" (odrzucenie OTU, których nie ma w "countTable")
+Posortowanie wierszy w tabeli "taxInfo" tak jak są posortowane w "countTable" (odrzucenie OTU, których nie ma w "countTable")
 ```r
 taxInfo = taxInfo[match(rownames(countTable), taxInfo$OTU), ]
 ```
-# utworzenie tabeli pomocniczej, w której znajdą się kolumny z: domena, typ, rząd, rodzina, rodzaj wyekstrahowane z kolumny "Taxonomy" tabeli "taxInfo"
+Utworzenie tabeli pomocniczej, w której znajdą się kolumny z: domena, typ, rząd, rodzina, rodzaj wyekstrahowane z kolumny "Taxonomy" tabeli "taxInfo"
 
-# ponieważ każdy wiersz zawiera różną ilość pól, wybieramy tylko pola od 1 do 6, żeby powstała tabela, a nie lista
+Ponieważ każdy wiersz zawiera różną ilość pól, wybieramy tylko pola od 1 do 6, żeby powstała tabela, a nie lista
 ```r
 taxInfo_tmp = sapply(taxInfo$Taxonomy, function(x){strsplit(as.character(x), split = ";", fixed = T)[[1]][1:6] %>% unlist()}) %>% t() 
 ```
-# usuniecie nawiasów i cyfr
+Usuniecie nawiasów i cyfr
 ```r
 taxInfo_tmp = gsub("\\(\\d*\\)", "", taxInfo_tmp)
 ```
-# utworzenie ostatecznej tabeli, przypisanie nazw wierszy i kolumn, zmiana klasy kolumn z factor na character
+Utworzenie ostatecznej tabeli, przypisanie nazw wierszy i kolumn, zmiana klasy kolumn z factor na character
 ```r
 taxInfo = as.data.frame(taxInfo_tmp[, 1:6], row.names = taxInfo$OTU)
 colnames(taxInfo) = c("Domain",	"Phylum",	"Class",	"Order",	"Family",	"Genus")
@@ -338,28 +338,28 @@ for(i in seq_along(colnames(taxInfo))){
   taxInfo[, i] = as.character(taxInfo[, i])
 }
 ```
-# usuniecie niepotrzebnych obiektów z przestrzeni roboczej
+Usuniecie niepotrzebnych obiektów z przestrzeni roboczej
 ```r
 rm(taxInfo_tmp)
 ```
-#### Zsumowanie ilości zaliczeń dla każdego OTU
+Zsumowanie ilości zaliczeń dla każdego OTU
 ```r
 otuSum = apply(countTable, 1, sum)
 ```
-#### Wygenerowanie wykresów
+## Wygenerowanie wykresów
 ### Analiza na poziomie typu
-# wybranie 10 topowych typów
+Wybranie 10 topowych typów
 ```r
 topPhylumList = unique(taxInfo[order(otuSum, decreasing = T), 2])[1:10]
 ```
-# utworzenie wektora zawierającego typy oraz przypisanie do wszystkich pozostałych OTU typu "other"
+Utworzenie wektora zawierającego typy oraz przypisanie do wszystkich pozostałych OTU typu "other"
 ```r
 phylumList = taxInfo$Phylum
 
 tmp = which(!(taxInfo$Phylum %in% topPhylumList))
 phylumList[tmp] = "Other"
 ```
-# utworzenie zagregowanej tabeli ze zaliczeniami (dla każdego typu zostaną zliczone wszystkie odczyty)
+Utworzenie zagregowanej tabeli ze zaliczeniami (dla każdego typu zostaną zliczone wszystkie odczyty)
 ```r
 countTable_aggr = aggregate(countTable, by = list(phylumList), FUN = sum)
 rownames(countTable_aggr) = countTable_aggr[, 1]
@@ -367,28 +367,28 @@ rownames(countTable_aggr) = countTable_aggr[, 1]
 countTable_aggr = countTable_aggr[, -1]
 colnames(countTable_aggr) = sampleInfo$Metagenomic_sample_name
 ```
-# utworzenie tabeli z frakcjami typów w danej próbce
+Utworzenie tabeli z frakcjami typów w danej próbce
 ```r
 plotData = as.matrix(countTable_aggr) %>% prop.table(2) %>% as.table() %>% as.data.frame() 
 colnames(plotData) = c("phylum", "sample", "fraction")
 ```
-# wygenerowanie wykresu
+Wygenerowanie wykresu
 ```r
 ggplot(plotData, aes(x = sample, y = fraction, fill = phylum)) + geom_bar(stat = "identity") + scale_fill_brewer(palette = "Set3")
 ```
 ###Analiza na poziomie rodzaju
-# wybranie 10 topowych rodzajów
+Wybranie 10 topowych rodzajów
 ```r
 topGenusList = unique(taxInfo[order(otuSum, decreasing = T), 6])[1:10]
 ```
-# utworzenie wektora zawierającego typy oraz przypisanie do wszystkich pozostałych OTU rodzaju "other" 
+Utworzenie wektora zawierającego typy oraz przypisanie do wszystkich pozostałych OTU rodzaju "other" 
 ```r
 genusList = taxInfo$Genus
 
 tmp = which(!(taxInfo$Genus %in% topGenusList))
 genusList[tmp] = "Other"
 ```
-# utworzenie zagregowanej tabeli ze zaliczeniami (dla każdego rodzaju zostaną zliczone wszystkie odczyty)
+Utworzenie zagregowanej tabeli ze zaliczeniami (dla każdego rodzaju zostaną zliczone wszystkie odczyty)
 ```r
 countTable_aggr = aggregate(countTable, by = list(genusList), FUN = sum)
 rownames(countTable_aggr) = countTable_aggr[, 1]
@@ -396,31 +396,31 @@ rownames(countTable_aggr) = countTable_aggr[, 1]
 countTable_aggr = countTable_aggr[, -1]
 colnames(countTable_aggr) = sampleInfo$Metagenomic_sample_name
 ```
-# utworzenie tabeli z frakcjami rodzajów w danej próbce
+Utworzenie tabeli z frakcjami rodzajów w danej próbce
 
 ```r
 plotData = as.matrix(countTable_aggr) %>% prop.table(2) %>% as.table() %>% as.data.frame() 
 colnames(plotData) = c("genus", "sample", "fraction")
 ```
-# wygenerowanie wykresu
+Wygenerowanie wykresu
 ```r
 ggplot(plotData, aes(x = sample, y = fraction, fill = genus)) + geom_bar(stat = "identity") + scale_fill_brewer(palette = "Set3")
 ```
 
 
-##### usuniecie genus=other
+###Usuniecie genus=other
 ```r
 countTable_aggr = countTable_aggr[-which(rownames(countTable_aggr) == "Other"), ]
 ```
 
 
-# utworzenie tabeli z frakcjami
+Utworzenie tabeli z frakcjami
 
 ```r
 plotData = as.matrix(countTable_aggr) %>% prop.table(2) %>% as.table() %>% as.data.frame() 
 colnames(plotData) = c("genus", "sample", "fraction")
 ```
-# wygenerowanie wykresu
+Wygenerowanie wykresu
 ```r
 ggplot(plotData, aes(x = sample, y = fraction, fill = genus)) + geom_bar(stat = "identity") + scale_fill_brewer(palette = "Set3")
 ```
