@@ -286,16 +286,15 @@ mothur > sub.sample(shared=PRJDB2729_final.shared, size=3289)
 Plik wynikowy:
 * PRJDB2729_final.0.01.subsample.shared
 
-## Analiza w programie R
-#### Przygotowanie danych 
-
-##Wczytanie potrzebnych bibliotek
+# Analiza w programie R
+## Przygotowanie danych 
+###Wczytanie potrzebnych bibliotek
 ```r
 library(magrittr)
 library(ggplot2)
 ```
-##Przygotowanie danych
-# wczytanie tabeli zawierającej zliczenia odczytów 
+
+### wczytanie tabeli zawierającej zliczenia odczytów 
 ```r
 countTable = read.table("../PRJDB2729_final.0.01.subsample.shared", header = T, row.names = 2, colClasses = c(rep("character", 3), rep("numeric", 5766)))
 ```
