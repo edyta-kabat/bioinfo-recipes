@@ -150,6 +150,8 @@ Mean:	16259.6	23682.3	157.332	0	3.20662
 Przefiltrowanie uliniowionych odczytów wg kryteriów narzuconych przed użytkownika
 ```sh
 mothur > screen.seqs(fasta=PRJDB2729.shhh.trim.unique.align, count=PRJDB2729.shhh.trim.count_table, end=0, maxhomop=8) 
+# lub bardziej restrykcyjnie by przyspieszyc
+mothur > screen.seqs(fasta=PRJDB2729.shhh.trim.unique.align, count=PRJDB2729.shhh.trim.count_table, minlength=287, maxlength=306, end=25300, start=13130, maxhomop=5)
 ```
 Pliki wynikowe:
 * PRJDB2729.shhh.trim.unique.good.align
