@@ -184,20 +184,20 @@ Wyszukanie sekwencji będących chimerami
 chimera.uchime(fasta=PRJDB2729.shhh.trim.unique.good.unique.precluster.align, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.count_table, dereplicate=t)
 ```
 Pliki wynikowe:
-* PRJDB2729.shhh.trim.unique.good.unique.precluster.uchime.pick.count_table
-* PRJDB2729.shhh.trim.unique.good.unique.precluster.uchime.chimeras
-* PRJDB2729.shhh.trim.unique.good.unique.precluster.uchime.accnos
+* PRJDB2729.shhh.trim.unique.good.unique.precluster.denovo.uchime.pick.count_table
+* PRJDB2729.shhh.trim.unique.good.unique.precluster.denovo.uchime.chimeras
+* PRJDB2729.shhh.trim.unique.good.unique.precluster.denovo.uchime.accnos
 
 Usunięcie ich
 ```sh
-remove.seqs(fasta=PRJDB2729.shhh.trim.unique.good.unique.precluster.align, accnos=PRJDB2729.shhh.trim.unique.good.unique.precluster.uchime.accnos)
+remove.seqs(fasta=PRJDB2729.shhh.trim.unique.good.unique.precluster.align, accnos=PRJDB2729.shhh.trim.unique.good.unique.precluster.denovo.uchime.accnos)
 ```
 Plik wynikowy: 
 * PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.align
 
 ### Przypisanie sekwencjom opisu taksonomicznego
 ```sh
-classify.seqs(fasta=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.align, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.uchime.pick.count_table, reference=silva.bacteria/silva.bacteria.fasta, taxonomy=silva.bacteria/silva.bacteria.silva.tax)
+classify.seqs(fasta=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.align, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.denovo.uchime.pick.count_table, reference=silva.bacteria/silva.bacteria.fasta, taxonomy=silva.bacteria/silva.bacteria.silva.tax)
 ```
 Pliki wynikowe: 
 * PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.silva.wang.taxonomy
@@ -207,7 +207,7 @@ Pliki wynikowe:
 ### Usunięcie wybranych taksonów
 Te taksony, które nas nie interesują (Archaea, Chloroplast, mitochondria, Eukaryota, unknown) zostają usunięte z plików do dalszych analiz.
 ```sh
-remove.lineage(fasta=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.align, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.uchime.pick.count_table, taxonomy=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.silva.wang.taxonomy, taxon=Archaea-Chloroplast-mitochondria-Eukaryota-unknown)
+remove.lineage(fasta=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.align, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.denovo.uchime.pick.count_table, taxonomy=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.silva.wang.taxonomy, taxon=Archaea-Chloroplast-mitochondria-Eukaryota-unknown)
 ```
 Pliki wynikowe: 
 * PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.silva.wang.pick.taxonomy
@@ -225,7 +225,7 @@ Plik wynikowy:
 
 Klastrowanie sekwencji
 ```sh
-cluster(column=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.dist, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.uchime.pick.pick.count_table)
+cluster(column=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.dist, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.denovo.uchime.pick.pick.count_table)
 ```
 Zajęło około 100 minut
 Plik wynikowy:
@@ -234,7 +234,7 @@ Plik wynikowy:
 ### Tabela z ilością sekwencji na OTU na próbkę
 To polecenie utworzy tabelę zawierającą liczbę sekwencji przypadającą na każde OTU dla każdej próbki.
 ```sh
-make.shared(list=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.an.unique_list.list, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.uchime.pick.pick.count_table, label=0.01)
+make.shared(list=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.an.unique_list.list, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.denovo.uchime.pick.pick.count_table, label=0.01)
 ```
 Pliki wynikowe:
 * PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.an.unique_list.shared
@@ -243,7 +243,7 @@ Pliki wynikowe:
 
 ### Utworzenie opisu taksonomicznego dla OTU
 ```sh
-classify.otu(list=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.an.unique_list.list, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.uchime.pick.pick.count_table, taxonomy=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.silva.wang.pick.taxonomy, label=0.01
+classify.otu(list=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.an.unique_list.list, count=PRJDB2729.shhh.trim.unique.good.unique.precluster.denovo.uchime.pick.pick.count_table, taxonomy=PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.silva.wang.pick.taxonomy, label=0.01)
 ```
 Pliki wynikowe: 
 * PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.an.unique_list.0.01.cons.taxonomy
@@ -253,8 +253,8 @@ Pliki wynikowe:
 ###
 Dla ułatwienia dalszej pracy, zmienimy nazwy otrzymanych plików
 ```sh
-cp PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.an.unique_list.shared PRJDB2729_final.shared
-cp PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.an.unique_list.0.01.cons.taxonomy PRJDB2729_final.cons.taxonomy
+system(cp PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.an.unique_list.shared PRJDB2729_final.shared)
+system(cp PRJDB2729.shhh.trim.unique.good.unique.precluster.pick.pick.an.unique_list.0.01.cons.taxonomy PRJDB2729_final.cons.taxonomy)
 ```
 
 ### Normalizacja 
@@ -321,8 +321,8 @@ taxFile.tmp = gsub("\\(\\d*\\)", "", taxFile.tmp)
 
 # utworzenie ostatecznej tabeli
 
-colnames(taxFile.tmp) = c("Domain",	"Phylum",	"Class",	"Order",	"Family",	"Genus", "NA", "NA", "NA")
-rownames(taxFile.tmp) = taxFile$OTU
+colnames(taxFile.tmp) = c("Domain",	"Phylum",	"Class",	"Order",	"Family",	"Genus", "NA", "NA")
+rownames(taxFile.tmp) = rownames(taxFile)#$OTU
 taxFile = taxFile.tmp[, 1:6]
 taxFile = as.matrix(taxFile)
 
