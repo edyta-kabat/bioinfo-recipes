@@ -334,7 +334,7 @@ Utworzenie ostatecznej tabeli, przypisanie nazw wierszy i kolumn, zmiana klasy k
 taxInfo = as.data.frame(taxInfo_tmp[, 1:6], row.names = taxInfo$OTU)
 colnames(taxInfo) = c("Domain",	"Phylum",	"Class",	"Order",	"Family",	"Genus")
 taxInfo <- apply(taxInfo, 2, as.character)
-rownames(taxInfo) <- rownames(counTable)
+rownames(taxInfo) <- rownames(countTable)
 ```
 Usuniecie niepotrzebnych obiektów z przestrzeni roboczej
 ```r
