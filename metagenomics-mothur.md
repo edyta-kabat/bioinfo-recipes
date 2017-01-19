@@ -335,7 +335,7 @@ taxInfo = as.data.frame(taxInfo_tmp[, 1:6], row.names = taxInfo$OTU)
 colnames(taxInfo) = c("Domain",	"Phylum",	"Class",	"Order",	"Family",	"Genus")
 taxInfo <- apply(taxInfo, 2, as.character)
 rownames(taxInfo) <- rownames(countTable)
-taxInfo <- as.data.frame(taxInfo)
+taxInfo <- as.data.frame(taxInfo, stringsAsFactors = F)
 ```
 Usuniecie niepotrzebnych obiektów z przestrzeni roboczej
 ```r
