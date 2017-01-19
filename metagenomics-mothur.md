@@ -323,7 +323,7 @@ Utworzenie tabeli pomocniczej, w której znajdą się kolumny z: domena, typ, rz
 
 Ponieważ każdy wiersz zawiera różną ilość pól, wybieramy tylko pola od 1 do 6, żeby powstała tabela, a nie lista
 ```r
-taxInfo_tmp = sapply(taxInfo$Taxonomy, function(x){strsplit(as.character(x), split = ";", fixed = T)[[1]][1:6] %>% unlist()}) %>% t() 
+taxInfo_tmp = sapply(taxInfo$Taxonomy, function(x){strsplit(as.character(x), split = ";")[[1]][1:6]}) %>% t() 
 ```
 Usuniecie nawiasów i cyfr
 ```r
