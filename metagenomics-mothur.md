@@ -335,6 +335,7 @@ taxInfo = as.data.frame(taxInfo_tmp[, 1:6], row.names = taxInfo$OTU)
 colnames(taxInfo) = c("Domain",	"Phylum",	"Class",	"Order",	"Family",	"Genus")
 taxInfo <- apply(taxInfo, 2, as.character)
 rownames(taxInfo) <- rownames(countTable)
+taxInfo <- as.data.frame(taxInfo)
 ```
 Usuniecie niepotrzebnych obiektów z przestrzeni roboczej
 ```r
@@ -348,7 +349,7 @@ otuSum = apply(countTable, 1, sum)
 ### Analiza na poziomie typu
 Wybranie 10 topowych typów
 ```r
-topPhylumList = unique(taxInfo[order(otuSum, decreasing = T), 2])[1:10]
+topPhylumList = unique(taxInfo$Phylum[order(otuSum, decreasing = T)])[1:10]
 ```
 Utworzenie wektora zawierającego typy oraz przypisanie do wszystkich pozostałych OTU typu "other"
 ```r
