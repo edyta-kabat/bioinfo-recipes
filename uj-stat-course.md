@@ -1,8 +1,10 @@
 # Tydzień 1 - wstęp do R i statystyki
 ## Zadanie 1.1
 Z jednego rozkładu normalnego losujemy dwie grupy, każda o liczebności 100. Porównujemy te dwie grupy przy pomocy testu t Studenta. Czynność tą wykonujemy 1000 razy. Należy naszkicować rozkład wartości P otrzymanych z testu t.
+```
 ### Mikrowykład
 Błąd pierwszego rodzaju (P, istotność, próg istotności alpha, podejście pra i post fisherowskie), błąd drugiego rodzaju (moc)
+```
 ## Zadanie 1.2
 Należy przeprowadzić symulację zadania 1.1 w R i narysować histogram wartości P
 ### Mikrowykład
