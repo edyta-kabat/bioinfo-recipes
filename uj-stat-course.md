@@ -26,5 +26,36 @@ Wylosować dwie grupy o liczebności 100 z rozkładu normalnego o parametrach od
 parametry, kwartet Ascombiego
 ```
 # Tydzień 2 - wielokrotne testowanie
+```
+### Mikrowykład
+potoki w R
+```
 ### Zadanie 2.1
-Wylosować dwie grupy o liczebności 100 z rozkładu normalnego o parametrach odpowiednio mean=0 sd=1 dla pierwszej grupy i mean=0.5 i sd=1 dla drugiej grupy. Obliczyć P dla różnicy między grupami. Czynność powtórzyć 100 razy a P zapisać do wektora V. Wylosować dwie grupy o liczebności 100 z rozkładu normalnego o parametrach odpowiednio mean=0 sd=1 dla pierwszej grupy i mean=0 i sd=1 dla drugiej grupy. Obliczyć P dla różnicy między grupami. Czynność powtórzyć 9900 razy a P zapisać do wektora V. Obliczyć ile mamy istotnych wyników w wektorze V dla progu P < 0.05. Ile jest przez przypadek? Jaki procent nie jest przez przypadek? Odpowiedzieć na to samo pytanie dla progu P < 0.01 i P < 0.001. Następnie przeprowadzić korekcję na wielokrotne testowanie FDR i powiedzieć ile jest istotnych przy progu q < 0.05. Ile wśród istotnych porównań jest w pierwszej 100 w wektorze V, ile w pozostałych 9900? WNioski? Przeprowadzić korekcję Bonferroniego.
+Wylosować dwie grupy o liczebności 100 z rozkładu normalnego o parametrach odpowiednio mean=0 sd=1 dla pierwszej grupy i mean=0.5 i sd=1 dla drugiej grupy. Obliczyć P dla różnicy między grupami. Czynność powtórzyć 100 razy a P zapisać do wektora V. Wylosować dwie grupy o liczebności 100 z rozkładu normalnego o parametrach odpowiednio mean=0 sd=1 dla pierwszej grupy i mean=0 i sd=1 dla drugiej grupy. Obliczyć P dla różnicy między grupami. Czynność powtórzyć 9900 razy a P zapisać do wektora V. 
+
+Obliczyć ile mamy istotnych wyników w wektorze V dla progu P < 0.05.
+Jaki procent istotnych porównań jest przez przypadek?
+Jaki procent nie jest przez przypadek?
+Odpowiedzieć na to samo pytanie dla progu P < 0.01 i P < 0.001.
+Następnie przeprowadzić korekcję na wielokrotne testowanie FDR i powiedzieć ile jest istotnych przy progu q < 0.05.
+Ile wśród istotnych porównań jest w pierwszej 100 w wektorze V, ile w pozostałych 9900?
+Wnioski?
+Przeprowadzić korekcję Bonferroniego. Odpowiedzieć na dwa powyższe pytania.
+
+```
+### Mikrowykład
+wprowadzenie do zbioru danych
+```
+### Zadanie 2.2
+W katalogu biostat-data jest plik cpp_6_lekow.xls. Plik uporządkować. Sprawdzić występowanie wyników odstających.
+Narysowac boxplot dla wszystkich lekow. Nazwa leku na wykresie to pierwsze trzy litery pisane uppercasem (np. ethanol = ETH)
+Narysować boxplot przy pomocy pakietu ggplot2. Kolory slupkow pobrac z pakiet RColorBrewer (Set 1)
+Do wykresu z punktu 3 dolozyc wąsy błędów
+Policzyc statystyke dla cpp (t testy)
+
+### Zadanie 2.3??
+Wczytac dane dla aktywnosci lokomotorycznej
+https://github.com/marpiech/bioinfo-recipes/blob/master/biostat-data/lokomotor_6_lekow.xls
+Narysowac wykresy liniowe przy pomocy ggplot z wykorzystaniem colorbrewera (trzeba dane zagregowac)
+Dolozyc odchylenie standardowe do wykresu
+Policzyc ANOVA z uwzględnieniem punktów czasowych
