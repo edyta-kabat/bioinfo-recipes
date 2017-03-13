@@ -42,20 +42,47 @@ Ile wśród istotnych porównań jest w pierwszej 100 w wektorze V, ile w pozost
 Wnioski?
 Przeprowadzić korekcję Bonferroniego. Odpowiedzieć na dwa powyższe pytania.
 
+# Tydzień 3 - data wrangling
+
 ```
 ### Mikrowykład
 wprowadzenie do zbioru danych
 ```
-### Zadanie 2.2
-W katalogu biostat-data jest plik cpp_6_lekow.xls. Plik uporządkować. Sprawdzić występowanie wyników odstających.
+### Zadanie 3.1
+W katalogu biostat-data/sixdrugs jest plik cpp_6_lekow.xls. Plik uporządkować. Sprawdzić występowanie wyników odstających i usunąć.
 Narysowac boxplot dla wszystkich lekow. Nazwa leku na wykresie to pierwsze trzy litery pisane uppercasem (np. ethanol = ETH)
 Narysować boxplot przy pomocy pakietu ggplot2. Kolory slupkow pobrac z pakiet RColorBrewer (Set 1)
 Do wykresu z punktu 3 dolozyc wąsy błędów
-Policzyc statystyke dla cpp (t testy)
+Policzyc statystyke dla cpp (t testy w stosunku do kontroli)
 
-### Zadanie 2.3??
+### Zadanie 3.2
 Wczytac dane dla aktywnosci lokomotorycznej
-https://github.com/marpiech/bioinfo-recipes/blob/master/biostat-data/lokomotor_6_lekow.xls
+https://github.com/marpiech/bioinfo-recipes/blob/master/biostat-data/sixdrugs/lokomotor_6_lekow.xls
 Narysowac wykresy liniowe przy pomocy ggplot z wykorzystaniem colorbrewera (trzeba dane zagregowac)
 Dolozyc odchylenie standardowe do wykresu
-Policzyc ANOVA z uwzględnieniem punktów czasowych
+Policzyc ANOVA z uwzględnieniem punktów czasowych (repeated measures)
+
+# Tydzień 4 - analiza zmian ekspresji genów w skali całego trankryptomu
+
+### Zadanie 4.1
+W katalogu znajdują się 3 pliki: 1) anno.xls to annotacje sond czyli mapowanie sondy na gen, 2) samples.xls to opis probek, 3) data.xls to pomiary ekspresji genów dla wssystkich sond i wszystkich probek. Wczytać do przestrzeni roboczej.
+
+### Zadanie 4.2
+Policzyć dwuczynnikową anovę dla czynników traktowanie (lek) i czas (od podania) z interakcją. Skorygować na wielokrotne testowanie (FDR) wartosci p dla wszystkich czynników. Ile jest istotnych wyników dla poszczególnych czynników dla FDR < 1%
+
+### Zadanie 4.3
+Sprawdzić istotność dla czynnika batch. Wystandaryzować przy pomocy mediany
+
+### Zadanie 4.4
+Policzyć dwuczynnikową anovę dla czynników traktowanie (lek) i czas (od podania) z interakcją. Skorygować na wielokrotne testowanie (FDR) wartosci p dla wszystkich czynników. Ile jest istotnych wyników dla poszczególnych czynników dla FDR < 1%
+
+### Zadanie 4.5
+Przy pomocy mapy cieplnej zwizualizować geny z istotnościa dla czynnika traktowanie.
+Skala kolorów: od blue dla najniższego poziomu przez biały do czerwonego dla najwyzszego poziomu.
+Wyskalować po wierszach.
+Odciąć wyniki odstające na poziomie -2.5sd i 2.5sd.
+Sklastrować wiersze przy pomocy metody complete.
+Miara odległości - korelacja.
+Kolumn nie klastrować. Kolumny poukładać wg. kolejności. NAI (1h, 2h, 4h, 8h), SAL, NIC, ETO, MOR, HER, COC, MET
+Wiersze opisać symbolami genów.
+Kolumny opisać wg. schematu COC_1h_rep1
