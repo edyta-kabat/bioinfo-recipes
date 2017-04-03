@@ -62,7 +62,7 @@ Narysowac wykresy liniowe przy pomocy ggplot z wykorzystaniem colorbrewera (trze
 Dolozyc odchylenie standardowe do wykresu
 Policzyc ANOVA z uwzględnieniem punktów czasowych (repeated measures)
 
-# Tydzień 4 - analiza zmian ekspresji genów w skali całego trankryptomu
+# Tydzień 4,5 - analiza zmian ekspresji genów w skali całego trankryptomu
 
 ### Zadanie 4.1
 W katalogu znajdują się 3 pliki: 1) anno.xls to annotacje sond czyli mapowanie sondy na gen, 2) samples.xls to opis probek, 3) data.xls to pomiary ekspresji genów dla wssystkich sond i wszystkich probek. Wczytać do przestrzeni roboczej.
@@ -86,3 +86,20 @@ Miara odległości - korelacja.
 Kolumn nie klastrować. Kolumny poukładać wg. kolejności. NAI (1h, 2h, 4h, 8h), SAL, NIC, ETO, MOR, HER, COC, MET
 Wiersze opisać symbolami genów.
 Kolumny opisać wg. schematu COC_1h_rep1
+
+# Tydzien 6,7 - analiza zmian ekspresji genow w skali calego genomu
+W katalogu bioinfo-recipes/biostat-data/aneurysm znajdują się dane pochodzące z profilowania ekspresji genów w krwi osób po pęknięciu tetniaka.
+
+### Zadanie 6.1
+Wczytac dane. Uporządkować przestrzeń roboczą.
+
+### Zadanie 6.2
+Sprawdzić, czy plec podana rozni się od plci ustalonej na podstawie profilu ekspresji genow. W trakcie rozwiazywania zadanie wykonac wizualizację
+
+### Zadanie 6.3
+Wybrac geny rożniące osoby z tętniakami pękniętymi od kontroli. Wyniki zwizualizować
+
+### Zadanie 6.4
+Wybrać top20 genów o ekspresji obniżonej ekspresji w krwi osób z pęknietymi tętniakami i sprawdzić z jakiego typu komórek mogąpochodzić (http://amp.pharm.mssm.edu/Enrichr/)
+
+# Tydzien 8 - analiza czułości i specyficzności testu
