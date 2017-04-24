@@ -103,3 +103,8 @@ Wybrac geny rożniące osoby z tętniakami pękniętymi od kontroli. Wyniki zwiz
 Wybrać top20 genów o ekspresji obniżonej ekspresji w krwi osób z pęknietymi tętniakami i sprawdzić z jakiego typu komórek mogąpochodzić (http://amp.pharm.mssm.edu/Enrichr/)
 
 # Tydzien 8 - analiza czułości i specyficzności testu
+
+W katalogu bioinfo-recipes/biostat-data/aneurysm znajdują sie pomiar stosunku limfocytów do monocytów we krwi pacjentów po pęknięciu tętniaka i bez (lmratio.csv)
+
+### Zadanie 8.1
+Narysować wykres czułości i specyficzności wskaźnika (krzywa ROC)
