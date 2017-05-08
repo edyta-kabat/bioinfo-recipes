@@ -108,3 +108,11 @@ W katalogu bioinfo-recipes/biostat-data/aneurysm znajdują sie pomiar stosunku l
 
 ### Zadanie 8.1
 Narysować wykres czułości i specyficzności wskaźnika (krzywa ROC)
+
+# Tydzien 9 - prezentacja wyników - serwer Shiny
+
+# Zadanie 9.1
+Wyjonac aplikację liczącą statystykę chi-kwadrat dla tabeli liczności 2x2. Wpisać dane
+
+### Zadanie do wyboru 9.1 (15 pktów)
+Aplikacja licząca nadreprezentację listy genów w terminach ontologii Gene Ontology
