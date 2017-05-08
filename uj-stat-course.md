@@ -112,7 +112,21 @@ Narysować wykres czułości i specyficzności wskaźnika (krzywa ROC)
 # Tydzien 9 - prezentacja wyników - serwer Shiny
 
 # Zadanie 9.1
-Wyjonac aplikację liczącą statystykę chi-kwadrat dla tabeli liczności 2x2. Wpisać dane
+Wyjonac aplikację liczącą statystykę chi-kwadrat i Fishera dla tabeli liczności 2x2. Zaprezentowac dla liczebności w poniższym tekście: "W badanej próbie 56 mężczyzn na 810 oraz 14 kobiet na 750 wykazywało objawy dyschromatomii"
 
 ### Zadanie do wyboru 9.1 (15 pktów)
-Aplikacja licząca nadreprezentację listy genów w terminach ontologii Gene Ontology
+Aplikacja licząca nadreprezentację listy genów w terminach ontologii Gene Ontology. Wejście: lista genów. Wyjście: nadreprezentowane terminy ontologiczne. Aby uzyskać maksimum prezentacja powinna być przejrzysta. Można pomyśleć o ustalenia liczby wyników do wyświetlenia
+
+### Zadanie do wyboru 9.2 (15 pktów)
+Wykreślić krzywe przeżywalności dla danych 'lung' z pakietu survival. Należy dać użytkownikowi możliwość podziału na centrum, na płeć. Należy dać możliwość ustalenia zakresu wieku. Aby uzsykać max punktóœ należy także pomyśleć nad pozostałymi zmiennymi
+
+### Zadanie do wyboru 9.3 (10 pktów)
+Narysować wykres ilości nadawanych imion w zależności od czasu. Wejście: imię, początek imienia. Można uwzględnić płeć. Aby uzyskać maksimum należy użytkownikowi pozwolić wpisać kilka roznych imion
+
+### Zadanie do wyboru 9.4 (10 pktów)
+Narysowac wykres zaleznosci oczekiwanej dlugosci zycia od PKB/mieszkańca. Input: rok wykresu. Wielkość koła powinna odwierciedlac wielkosc populacji (logarytmicznie). A kolor koła kontynent. Dane: http://www.gapminder.org/data/
+
+### Zadanie do wyboru 9.5 (15 pktów)
+Narysować mapę świata z zaznaczoną kolorem oczekiwaną długością życia w zależności od kraju. Input: rok wykresu. Dane: http://www.gapminder.org/data/
+
+Zadanie należy udostępnić poprzez dowolny publiczny system kontroli wersji. Polecam github lub bitbucket. Init należy wykonać
