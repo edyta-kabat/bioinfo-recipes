@@ -112,7 +112,7 @@ Narysować wykres czułości i specyficzności wskaźnika (krzywa ROC)
 # Tydzien 9 - prezentacja wyników - serwer Shiny
 
 # Zadanie 9.1
-Wyjonac aplikację liczącą statystykę chi-kwadrat i Fishera dla tabeli liczności 2x2. Zaprezentowac dla liczebności w poniższym tekście: "W badanej próbie 56 mężczyzn na 810 oraz 14 kobiet na 750 wykazywało objawy dyschromatomii"
+Wykonac aplikację liczącą statystykę chi-kwadrat i Fishera dla tabeli liczności 2x2. Zaprezentowac dla liczebności w poniższym tekście: "W badanej próbie 56 mężczyzn na 810 oraz 14 kobiet na 750 wykazywało objawy dyschromatomii"
 
 ### Zadanie do wyboru 9.1 (15 pktów)
 Aplikacja licząca nadreprezentację listy genów w terminach ontologii Gene Ontology. Wejście: lista genów. Wyjście: nadreprezentowane terminy ontologiczne. Aby uzyskać maksimum prezentacja powinna być przejrzysta. Można pomyśleć o ustalenia liczby wyników do wyświetlenia
