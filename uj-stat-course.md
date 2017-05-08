@@ -120,13 +120,19 @@ Aplikacja licząca nadreprezentację listy genów w terminach ontologii Gene Ont
 ### Zadanie do wyboru 9.2 (15 pktów)
 Wykreślić krzywe przeżywalności dla danych 'lung' z pakietu survival. Należy dać użytkownikowi możliwość podziału na centrum, na płeć. Należy dać możliwość ustalenia zakresu wieku. Aby uzsykać max punktóœ należy także pomyśleć nad pozostałymi zmiennymi
 
-### Zadanie do wyboru 9.3 (10 pktów)
-Narysować wykres ilości nadawanych imion w zależności od czasu. Wejście: imię, początek imienia. Można uwzględnić płeć. Aby uzyskać maksimum należy użytkownikowi pozwolić wpisać kilka roznych imion
+### Zadanie do wyboru 9.3 (15 pktów)
+Przedstawić wykres ilości nadawanych imion w zależności od czasu. Wejście: imię, początek imienia. Można uwzględnić płeć. Aby uzyskać maksimum należy użytkownikowi pozwolić wpisać kilka roznych imion
 
-### Zadanie do wyboru 9.4 (10 pktów)
-Narysowac wykres zaleznosci oczekiwanej dlugosci zycia od PKB/mieszkańca. Input: rok wykresu. Wielkość koła powinna odwierciedlac wielkosc populacji (logarytmicznie). A kolor koła kontynent. Dane: http://www.gapminder.org/data/
+### Zadanie do wyboru 9.4 (15 pktów)
+Przedstawić wykres zaleznosci oczekiwanej dlugosci zycia od PKB/mieszkańca. Input: rok wykresu. Wielkość koła powinna odwierciedlac wielkosc populacji (logarytmicznie). A kolor koła kontynent. Dane: http://www.gapminder.org/data/
 
 ### Zadanie do wyboru 9.5 (15 pktów)
-Narysować mapę świata z zaznaczoną kolorem oczekiwaną długością życia w zależności od kraju. Input: rok wykresu. Dane: http://www.gapminder.org/data/
+Przedstawić mapę świata z zaznaczoną kolorem oczekiwaną długością życia w zależności od kraju. Input: rok wykresu. Dane: http://www.gapminder.org/data/
+
+### Zadanie do wyboru 9.6 (15 pktów)
+Przedstawić mapę północnego pacyfiku z zaznaczonymi szlakami migracji fok. Wejscie: sposoby wizualizacji (strzałki, kreski). Dane (seals) z pakietu ggplot2. Można dodać uśrednienie sąsiednich pół 2x2, 3x3, 4x4.
+
+### Zadanie do wyboru 9.7 (15 pktów)
+Przedstawić ekspresję genów w róznych tkankach (http://biogps.org/downloads/). Input: nazwa genu. Dodatkowo można poszukac skorelowanych genów lub genów występujących w danej tkance.
 
 Zadanie należy udostępnić poprzez dowolny publiczny system kontroli wersji. Polecam github lub bitbucket. Init należy wykonać
