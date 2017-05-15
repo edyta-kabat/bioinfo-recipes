@@ -136,3 +136,10 @@ Przedstawić mapę północnego pacyfiku z zaznaczonymi szlakami migracji fok. W
 Przedstawić ekspresję genów w róznych tkankach (http://biogps.org/downloads/). Input: nazwa genu. Dodatkowo można poszukac skorelowanych genów lub genów występujących w danej tkance.
 
 Zadanie należy udostępnić poprzez dowolny publiczny system kontroli wersji. Polecam github lub bitbucket. Init należy wykonać
+
+# Tydzien 10 - wizualizacja danych
+
+### Zadanie w grupach
+
+### Zadanie 10.1
+W katalogu z danymi, znajduje sie podkatalog z danymi z metagenomiki. Dane pochodzą z sekwencjonowania próbek środowiskowych z różnych elementów uniwersyteckich toalet. W katalogu znajdują się trzy pliki - z opisem taksonów, z opisem probek oraz iloscią odczytow przypadającą na dany takson w danej probce. Nalezy przygotowac wizualizację dowolnego fragmentu danych i przedstawic wnioski z wykresu.
